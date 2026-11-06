@@ -5,8 +5,6 @@ import moviesRouter from "./routes/movies.js";
 import authRouter from "./routes/auth.js";
 
 const app = express();
-// TODO 1: port와 clientOrigin을 환경 변수에서 읽습니다.
-// TODO 2: clientOrigin을 CORS 허용 출처로 사용합니다.
 app.use(cors({ origin: "http://localhost:5173" }));
 app.use(express.json());
 app.use("/api/auth", authRouter);
@@ -32,7 +30,6 @@ async function startServer() {
     console.log("Redis 미설정: DB 조회로 진행합니다.");
   }
 
-  // TODO 3: port와 0.0.0.0으로 요청을 받고 실제 포트를 출력합니다.
   app.listen(4000, () => {
     console.log("서버 실행: http://localhost:4000");
   });

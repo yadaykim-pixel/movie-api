@@ -100,6 +100,7 @@ function MoviesPage({ isAdmin = false }) {
   }, []);
 
   async function searchMovies(searchKeyword, selectedSort) {
+    searchKeyword = searchKeyword.trim();
     setIsLoading(true);
     setError("");
 
@@ -115,6 +116,7 @@ function MoviesPage({ isAdmin = false }) {
       }
 
       const data = await response.json();
+      // 실습: 이 위치에 결과가 0건일 때 GA로 이벤트를 보내는 코드를 추가합니다.
       setMovies(data);
     } catch (error) {
       console.error("영화 검색 실패:", error);

@@ -5,6 +5,8 @@ import moviesRouter from "./routes/movies.js";
 import authRouter from "./routes/auth.js";
 
 const app = express();
+const port = Number(process.env.PORT || 4000);
+// TODO: CORS 허용 주소를 CLIENT_ORIGIN 환경 변수로 분리합니다.
 app.use(cors({ origin: "http://localhost:5173" }));
 app.use(express.json());
 app.use("/api/auth", authRouter);
@@ -30,8 +32,8 @@ async function startServer() {
     console.log("Redis 미설정: DB 조회로 진행합니다.");
   }
 
-  app.listen(4000, () => {
-    console.log("서버 실행: http://localhost:4000");
+  app.listen(port, "0.0.0.0", () => {
+    console.log(`서버 실행: port ${port}`);
   });
 }
 

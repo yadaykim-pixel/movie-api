@@ -1,9 +1,12 @@
+import MoviePoster from "./MoviePoster.jsx";
 import { Pencil, Trash2 } from "lucide-react";
 import { Link } from "react-router";
 
 function MovieCard({ movie, isAdmin, handleEdit, handleDelete, isDeleting }) {
   return (
-    <article className="group rounded-xl border border-slate-200 bg-white p-4 sm:p-8">
+    <article className="group grid grid-cols-1 items-start gap-5 rounded-xl border border-slate-200 bg-white p-5 sm:grid-cols-[140px_minmax(0,1fr)] sm:gap-6 sm:p-6">
+      <MoviePoster movie={movie} />
+      <div className="min-w-0">
       <div className="flex flex-col items-start justify-between gap-2 sm:flex-row sm:gap-6">
         <h3 className="min-w-0 wrap-anywhere text-lg font-bold sm:text-2xl tracking-tight"><Link to={`/movies/${movie.id}`}>{movie.title}</Link></h3>
         <span className="shrink-0 rounded bg-slate-100 px-2 py-1 text-xs sm:text-sm text-slate-600">
@@ -28,6 +31,7 @@ function MovieCard({ movie, isAdmin, handleEdit, handleDelete, isDeleting }) {
           </button>
         </div>
       )}
+      </div>
     </article>
   );
 }

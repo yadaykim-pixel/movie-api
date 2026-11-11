@@ -4,12 +4,14 @@ import { redis, redisConfigured } from "./redis.js";
 import moviesRouter from "./routes/movies.js";
 import authRouter from "./routes/auth.js";
 
+import postersRouter from "./routes/posters.js";
+
 const app = express();
 const port = Number(process.env.PORT || 4000);
-// TODO: CORS 허용 주소를 CLIENT_ORIGIN 환경 변수로 분리합니다.
-app.use(cors({ origin: "http://localhost:5173" }));
+app.use(cors({ origin: process.env.CLIENT_ORIGIN }));
 app.use(express.json());
 app.use("/api/auth", authRouter);
+app.use("/api/movies", postersRouter);
 app.use("/api/movies", moviesRouter);
 
 app.get("/", (req, res) => {

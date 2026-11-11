@@ -6,11 +6,12 @@ function MovieForm({
   handleSubmit,
   handleCancel,
   submitLabel,
+  children,
 }) {
   return (
     <form aria-label="영화 정보" onSubmit={handleSubmit} className="mb-8 rounded-xl border border-slate-200 bg-white p-6">
       <p role="alert" className="mb-4 text-sm text-red-700">{error}</p>
-      <fieldset className="flex min-w-0 flex-col gap-4">
+      <fieldset disabled={isSubmitting} className="flex min-w-0 flex-col gap-4">
         <label className="flex flex-col gap-2 text-sm font-medium text-slate-700">
           제목
           <input type="text" value={form.title} onChange={(event) => {
@@ -43,6 +44,7 @@ function MovieForm({
             }} required rows={3}
             className="w-full resize-y rounded-lg border border-slate-300 bg-white px-4 py-3 focus:outline-2 focus:outline-blue-600" />
         </label>
+        {children}
         <div className="flex justify-end gap-2">
           {handleCancel && (
             <button type="button" onClick={handleCancel} className="cursor-pointer rounded-lg border border-slate-300 px-5 py-3 text-sm hover:bg-slate-50">취소</button>

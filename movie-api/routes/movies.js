@@ -61,7 +61,7 @@ router.get("/", async (req, res) => {
     console.log("[DB 조회]", keyword, sort);
     const { data, error } = await supabase
       .from("movies")
-      .select("id, title, director, releaseYear, overview")
+      .select("id, title, director, releaseYear, overview, poster_path")
       .ilike("title", `%${keyword}%`)
       .order(column, {
         ascending: ascending,
@@ -103,7 +103,7 @@ router.get("/:id", async (req, res) => {
   try {
     const { data, error } = await supabase
       .from("movies")
-      .select("id, title, director, releaseYear, overview")
+      .select("id, title, director, releaseYear, overview, poster_path")
       .eq("id", movieId)
       .maybeSingle();
 
@@ -172,7 +172,7 @@ router.post("/", requireAuth, requireAdmin, async (req, res) => {
     const { data, error } = await supabase
       .from("movies")
       .insert(newMovie)
-      .select("id, title, director, releaseYear, overview")
+      .select("id, title, director, releaseYear, overview, poster_path")
       .single();
 
     if (error) {
@@ -206,7 +206,7 @@ router.delete("/:id", requireAuth, requireAdmin, async (req, res) => {
       .from("movies")
       .delete()
       .eq("id", movieId)
-      .select("id")
+      .select("id, poster_path")
       .maybeSingle();
 
     if (error) {
@@ -218,6 +218,14 @@ router.delete("/:id", requireAuth, requireAdmin, async (req, res) => {
       return;
     }
 
+    if (data.poster_path?.startsWith(`${movieId}/`)) {
+      try {
+        const { error: removeError } = await supabase.storage.from("movie-posters").remove([data.poster_path]);
+        if (removeError) console.error("삭제된 영화의 파일 정리 실패:", data.poster_path, removeError.message);
+      } catch (error) {
+        console.error("삭제된 영화의 파일 정리 실패:", data.poster_path, error.message);
+      }
+    }
     await invalidateMovieLists();
     res.status(200).json(data);
   } catch (error) {
@@ -317,7 +325,7 @@ router.patch("/:id", requireAuth, requireAdmin, async (req, res) => {
       .from("movies")
       .update(changes)
       .eq("id", movieId)
-      .select("id, title, director, releaseYear, overview")
+      .select("id, title, director, releaseYear, overview, poster_path")
       .maybeSingle();
 
     if (error) {
